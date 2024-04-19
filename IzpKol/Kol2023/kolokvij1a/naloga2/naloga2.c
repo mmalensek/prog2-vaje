@@ -31,33 +31,39 @@
 
 //=============================================================================
 
-char** poStolpcih(char** nizi, int stVhodnih, int* stIzhodnih) {
-    
-    int maxLen=-1;
-    for (int i=0;i<stVhodnih;i++){
-        int length=strlen(nizi[i]);
-        if (length>maxLen){
-            maxLen=length;
+char **poStolpcih(char **nizi, int stVhodnih, int *stIzhodnih)
+{
+    char **tabela;
+    int maxDolzina = 0;
+
+    for (int i = 0; i < stVhodnih; i++)
+    {
+        if (strlen(nizi[i]) > maxDolzina)
+        {
+            maxDolzina = strlen(nizi[i]);
         }
     }
 
-    *stIzhodnih=maxLen;
+    *stIzhodnih = maxDolzina;
+    tabela = (char **)calloc(maxDolzina, sizeof(char *));
+    int *mesto;
+    mesto = (int *)calloc(maxDolzina, sizeof(int));
 
-    char** tabela=calloc(maxLen+1,sizeof(char*));
-    for (int i=0;i<maxLen+1;i++){
-        tabela[i]=calloc(stVhodnih+1,sizeof(char));
+    for (int i = 0; i < maxDolzina; i++)
+    {
+        tabela[i] = (char *)calloc(stVhodnih, sizeof(char *));
     }
 
-    for (int i=0;i<maxLen;i++){
-        int counter=0;
-        for (int j=0;j<stVhodnih;j++){
-            if (strlen(nizi[j])>i){
-                tabela[i][counter]=nizi[j][i];
-                counter++;
-            }
+    for (int i = 0; i < stVhodnih; i++)
+    {
+        for (int y = 0; y < strlen(nizi[i]); y++)
+        {
+            tabela[y][mesto[y]] = nizi[i][y];
+            mesto[y]++;
         }
     }
 
+    free(mesto);
     return tabela;
 }
 
@@ -65,19 +71,21 @@ char** poStolpcih(char** nizi, int stVhodnih, int* stIzhodnih) {
 
 #ifndef test
 
-char* NIZI[] = {
+char *NIZI[] = {
     "Danes",
     "je",
     "kolokvij",
     "pri_P2!",
 };
 
-int main() {
+int main()
+{
     int stIzhodnih = 0;
-    char** rezultat = poStolpcih(NIZI, sizeof(NIZI) / sizeof(NIZI[0]), &stIzhodnih);
+    char **rezultat = poStolpcih(NIZI, sizeof(NIZI) / sizeof(NIZI[0]), &stIzhodnih);
     printf("%d\n", stIzhodnih);
 
-    for (int i = 0; i < stIzhodnih; i++) {
+    for (int i = 0; i < stIzhodnih; i++)
+    {
         printf("%s\n", rezultat[i]);
         free(rezultat[i]);
     }
